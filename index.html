@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crossfit Board</title>
+    <style>
+
+
+        Add this CSS reset to your CSS code:
+
+        (
+        From here
+
+        )
+
+        /* http://meyerweb.com/eric/tools/css/reset/
+           v2.0 | 20110126
+           License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+
+        body {
+            line-height: 1;
+        }
+
+        ol, ul {
+            list-style: none;
+        }
+
+        blockquote, q {
+            quotes: none;
+        }
+
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .header-space {
+            line-height: 30px;
+        }
+
+        .header-cell {
+            position: relative;
+        }
+
+        .weight-value {
+            transform: rotate(-45deg);
+            left: 33px;
+            position: absolute;
+            top:-7px;
+        }
+
+        .exercise-short-name {
+            display: table-cell;
+            line-height: 28px;
+        }
+
+        .long-name-container {
+            position: absolute;
+            display: flex;
+            margin-left: 50px;
+            width: 700px;
+            top:1px;
+            justify-content: space-around;
+        }
+
+        .exercise-name {
+            display: inline-block;
+            opacity: 0.2;
+            transform: scale(2, 1);
+        }
+
+        .relative-container {
+            position: relative;
+        }
+
+        .grid-cell-container {
+            width: 36px;
+            height: 100%;
+            border-bottom: 1px solid black;
+            border-top: 1px solid black;
+            border-left: 1px solid #e6e6e6;
+            border-right: 1px solid #e6e6e6;
+            position: relative;
+            display: inline-block;
+            border-collapse: collapse;
+        }
+
+        .grid-cell-separator {
+            width: 100%;
+            height: 70%;
+            border-bottom: 1px solid black;
+        }
+
+        .grid-cell-tick-top {
+            width: 1px;
+            height: 5px;
+            left: 50%;
+            position: absolute;
+            border-left: 2px solid black;
+        }
+
+        .grid-cell-tick {
+            width: 1px;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            border-left: 2px solid black;
+        }
+
+        .grid-cell-tick-top {
+            top: 0px;
+        }
+
+        .grid-cell-tick-bottom {
+            bottom: 0px;
+        }
+
+    </style>
+</head>
+
+<body>
+<table id='main-table' cellpadding="0" cellspacing="0">
+    <thead>
+    <tr>
+
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</body>
+<script src='https://code.jquery.com/jquery-2.2.1.min.js'></script>
+<script type='text/javascript'>
+    (function () {
+        var weightStart = 20;
+        var weightEnd = 200;
+        var weightJump = 10;
+
+        var exercises = [
+            {
+                name: 'Dead Lift',
+                shortName: 'DL'
+            },
+            {
+                name: 'Back Squat',
+                shortName: 'BS'
+            },
+            {
+                name: 'Front Squat',
+                shortName: 'FS'
+            },
+            {
+                name: 'Overhead Squat',
+                shortName: 'OS'
+            },
+            {
+                name: 'Shoulder Press',
+                shortName: 'SP'
+            },
+            {
+                name: 'Push Press',
+                shortName: 'PP'
+            },
+            {
+                name: 'Push Jerk',
+                shortName: 'PJ'
+            },
+            {
+                name: 'Squat Clean',
+                shortName: 'SC'
+            },
+            {
+                name: 'Power Clean',
+                shortName: 'PC'
+            },
+            {
+                name: 'Snatch',
+                shortName: 'SN'
+            },
+            {
+                name: 'Power Snatch',
+                shortName: 'PS'
+            },
+            {
+                name: 'Bench Press',
+                shortName: 'BP'
+            }
+        ];
+
+        var numberOfBackgroundExerciseName = 2;
+
+        var $table = $('#main-table');
+
+        function getGridCell() {
+            return "<div class='grid-cell-container'>" +
+                    "<div class='grid-cell-tick grid-cell-tick-top'>" +
+                    "</div>" +
+                    "<div class='grid-cell-tick grid-cell-tick-bottom'>" +
+                    "</div>" +
+                    "<div class='grid-cell-separator'>" +
+                    "</div>" +
+                    "</div>";
+        }
+
+        function getHeaderCell(value) {
+            var $cell = $('<div></div>').addClass('header-cell');
+            $cell.append($('<div>' + value + '</div>').addClass('weight-value'));
+            return $cell;
+        }
+
+        function createExerciseRowHeader($tr, exercise) {
+            var i;
+            var $td = $('<td></td>');
+            var $relativeContainer = $('<div></div>').addClass('relative-container');
+            $relativeContainer.append($('<span>' + exercise.shortName + '</span>').addClass('exercise-short-name'));
+            var $longNameContainer = $('<span></span>').addClass('long-name-container');
+            for (i = 0; i < numberOfBackgroundExerciseName; i++) {
+                $longNameContainer.append($('<div>' + exercise.name + '</div>').addClass('exercise-name').addClass(exercise.scale));
+            }
+            $relativeContainer.append($longNameContainer);
+            $td.append($relativeContainer);
+            $tr.append($td);
+        }
+
+        function createExerciseRowGrid($tr) {
+
+            var i;
+            var $td;
+            for (i = weightStart; i <= weightEnd; i += weightJump) {
+                $td = $('<td></td>');
+                $td.append(getGridCell());
+                $tr.append($td);
+            }
+        }
+
+        function createHeader() {
+            var i;
+            var $tr = $table.find('thead tr');
+            var $th = $('<th></th>');
+            $th.append($('<div></div>').addClass('header-space').html('kg'));
+            $tr.append($th);
+            for (i = weightStart; i <= weightEnd; i += weightJump) {
+                $th = $('<th></th>');
+                $th.append(getHeaderCell(i));
+                $tr.append($th);
+            }
+        }
+
+        function createBody() {
+            var $body = $table.find('tbody');
+            var i;
+            var $tr;
+            for (i = 0; i < exercises.length; i++) {
+                $tr = $('<tr></tr>');
+                createExerciseRowHeader($tr, exercises[i]);
+                createExerciseRowGrid($tr);
+                $body.append($tr);
+            }
+
+        }
+
+        createHeader();
+        createBody();
+    })();
+</script>
+</html>
