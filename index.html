@@ -111,6 +111,26 @@
         var weightStart = 20;
         var weightEnd = 200;
         var weightJump = 10;
+        function getParams(params) {
+            var result = {};
+            if (params === '') {
+                return result;
+            }
+            var query = params.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (pair[0] === '') {
+                    continue;
+                }
+                if (pair.length === 1) { //it is legal to have parameters as ?a=1&b&c=2 so we put b with null
+                    result[decodeURIComponent(pair[0])] = null;
+                } else {
+                    result[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                }
+            }
+            return result;
+        }
 
         var exercises = [
             {
@@ -166,6 +186,29 @@
         var numberOfBackgroundExerciseName = 2;
 
         var $table = $('#main-table');
+
+        function getParams() {
+            var result = {};
+            var params = window.location.search;
+            if (params === '') {
+                return result;
+            }
+
+            var query = params.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (pair[0] === '') {
+                    continue;
+                }
+                if (pair.length === 1) { //it is legal to have parameters as ?a=1&b&c=2 so we put b with null
+                    result[decodeURIComponent(pair[0])] = null;
+                } else {
+                    result[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                }
+            }
+            return result;
+        }
 
         function getGridCell() {
             return "<div class='grid-cell-container'>" +
@@ -235,6 +278,10 @@
 
         }
 
+        var params = getParams();
+        weightStart = Number(params.weightStart) || weightStart;
+        weightEnd = Number(params.weightEnd) || weightEnd;
+        weightJump = Number(params.weightJump) || weightJump;
         createHeader();
         createBody();
     })();
