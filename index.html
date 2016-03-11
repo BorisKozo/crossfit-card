@@ -232,7 +232,7 @@
             var $td = $('<td></td>');
             var $relativeContainer = $('<div></div>').addClass('relative-container');
             $relativeContainer.append($('<span>' + exercise.shortName + '</span>').addClass('exercise-short-name'));
-            var $longNameContainer = $('<span></span>').addClass('long-name-container');
+            var $longNameContainer = $('<span></span>').addClass('long-name-container').width(36*(weightEnd-weightStart)/weightJump);
             for (i = 0; i < numberOfBackgroundExerciseName; i++) {
                 $longNameContainer.append($('<div>' + exercise.name + '</div>').addClass('exercise-name').addClass(exercise.scale));
             }
@@ -274,6 +274,7 @@
                 createExerciseRowHeader($tr, exercises[i]);
                 createExerciseRowGrid($tr);
                 $body.append($tr);
+
             }
 
         }
